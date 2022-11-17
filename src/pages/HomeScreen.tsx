@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { View, Image } from "react-native";
-import { getTwoRandomMemes } from "../actions/MemeAPI";
+import { getTwoRandomMemes } from "../utils/MemeAPI";
 
 export const HomeScreen = () => {
   const [memes, setMemes] = useState<any[]>([]);
