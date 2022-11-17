@@ -1,4 +1,4 @@
-const axios = require("axios");
+import axios, * as others from 'axios';
 
 export interface Meme {
   id: string;
@@ -10,12 +10,16 @@ export interface Meme {
 }
 
 export async function GetMemes() {
-  const response = await axios.get(`https://api.imgflip.com/get_memes`);
+  const response: any = await axios.get(`https://api.imgflip.com/get_memes`);
 
-  const memes: Meme[] = response.data;
+  const memes: Meme[] = response.data.data.memes;
   return memes;
 }
 
 export async function getTwoRandomMemes() {
-
+    const memes = await GetMemes();
+    const retMemes = [];
+    retMemes.push(memes[Math.floor(Math.random() * memes.length)]);
+    retMemes.push(memes[Math.floor(Math.random() * memes.length)]);
+    return retMemes;
 }
