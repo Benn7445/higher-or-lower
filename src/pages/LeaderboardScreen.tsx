@@ -31,7 +31,7 @@ export const LeaderboardScreen = () => {
         height: "100%",
       }}
       scrollEnabled={false}
-      keyboardShouldPersistTaps={true}
+      keyboardShouldPersistTaps="always"
     >
       <View>
         <Text style={{ color: "white", fontSize: 16 }}>

@@ -19,7 +19,7 @@ export const HomeScreen = () => {
         return (
           <Image
             key={"meme-" + count}
-            source={meme}
+            source={{ uri: meme.url }}
             style={{ width: "100%", height: "50%" }}
             resizeMode="cover"
           />
