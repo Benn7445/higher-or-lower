@@ -43,7 +43,7 @@ export const LeaderboardScreen = () => {
             fontSize: 35,
             color: "#fff",
             fontWeight: "700",
-            textAlign: "center"
+            textAlign: "center",
           }}
           placeholderTextColor="#737373"
           placeholder="Username"

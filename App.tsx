@@ -4,6 +4,8 @@ import HomeScreen from "./src/pages/HomeScreen";
 import LeaderboardScreen from "./src/pages/LeaderboardScreen";
 import AntDesign from "react-native-vector-icons/AntDesign";
 
+import Higher from "./src/pages/gamecode";
+
 const Tab = createBottomTabNavigator();
 
 export const App = () => {
@@ -24,7 +26,7 @@ export const App = () => {
               );
             },
             tabBarActiveTintColor: "#008080",
-            tabBarInactiveTintColor: "#808080"
+            tabBarInactiveTintColor: "#808080",
           }}
         />
         <Tab.Screen
@@ -41,9 +43,10 @@ export const App = () => {
               );
             },
             tabBarActiveTintColor: "#008080",
-            tabBarInactiveTintColor: "#808080"
+            tabBarInactiveTintColor: "#808080",
           }}
         />
+        <Tab.Screen name="gameV2" component={Higher} />
       </Tab.Navigator>
     </NavigationContainer>
   );
