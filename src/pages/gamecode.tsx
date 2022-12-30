@@ -11,6 +11,7 @@ import {
 import axios from "axios";
 import { GetMemes } from "../utils/MemeAPI";
 import { memoize } from "lodash";
+import * as Haptics from 'expo-haptics';
 
 // Define an interface for the data that is returned by the imgflip API
 interface Meme {
@@ -65,7 +66,7 @@ const Higher = () => {
 
     if (currentIndex > secondMemeIndex) {
       // compare the current index to the next index instead of the id properties
-      setScore(score + 1);
+      setScore(score - 1);
     }
     if (secondMemeIndex > 98) {
       secondMemeIndex = 1;
@@ -91,6 +92,21 @@ const Higher = () => {
     setScore(0);
   };
 
+  const multiFuncLower = () => {
+    handleLower();
+    Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
+  }
+
+  const multiFuncHigher = () => {
+    handleHigher();
+    Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
+  }
+
+  const multiFuncScore = ()=> {
+    saveScore();
+    Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
+  }
+
   return (
     <ScrollView>
       <View style={styles.container}>
@@ -112,8 +128,8 @@ const Higher = () => {
           />
         ) : null}
         <View style={styles.buttonContainer}>
-          <Button title="Lower" onPress={handleLower} />
-          <Button title="Higher" onPress={handleHigher} />
+          <Button title="Lower" onPress={multiFuncLower} />
+          <Button title="Higher" onPress={multiFuncHigher} />
         </View>
 
         {/* add a text input and button for the user to input their username and save their score */}
@@ -122,7 +138,7 @@ const Higher = () => {
           onChangeText={setUsername}
           placeholder="Enter your username"
         />
-        <Button title="Save Score" onPress={saveScore} />
+        <Button title="Save Score" onPress={multiFuncScore} />
 
         {/* add a leaderboard to display the saved scores */}
         <View>
