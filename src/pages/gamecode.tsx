@@ -8,10 +8,12 @@ import {
   TextInput,
   ScrollView,
 } from "react-native";
-import axios from "axios";
-import { GetMemes } from "../utils/MemeAPI";
-import { memoize } from "lodash";
 
+import { GetMemes } from "../utils/MemeAPI";
+import * as Brightness from "expo-brightness";
+
+import * as Haptics from "expo-haptics";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 // Define an interface for the data that is returned by the imgflip API
 interface Meme {
   id: string;
@@ -29,6 +31,7 @@ const Higher = () => {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [score, setScore] = useState(0);
   const [username, setUsername] = useState("");
+  const [lifes, setLifes] = useState(3);
 
   // add a state variable to store the scores and usernames
   const [scores, setScores] = useState<ScoreData[]>([]);
@@ -45,12 +48,13 @@ const Higher = () => {
 
   const handleHigher = () => {
     if (currentIndex === secondMemeIndex - 1) {
-      return;
+      return setScore(score);
     }
 
     if (currentIndex < secondMemeIndex) {
-      // compare the current index to the next index instead of the id properties
       setScore(score + 1);
+    } else {
+      setLifes(lifes - 1);
     }
     if (secondMemeIndex > 98) {
       secondMemeIndex = 1;
@@ -64,8 +68,9 @@ const Higher = () => {
     }
 
     if (currentIndex > secondMemeIndex) {
-      // compare the current index to the next index instead of the id properties
       setScore(score + 1);
+    } else {
+      setLifes(lifes - 1);
     }
     if (secondMemeIndex > 98) {
       secondMemeIndex = 1;
@@ -77,7 +82,7 @@ const Higher = () => {
 
   const secondMeme = memes[secondMemeIndex]; // add a reference to the second meme here
 
-  const saveScore = () => {
+  const saveScore = async () => {
     const scoreData: ScoreData = {
       username: username,
       score: score,
@@ -86,54 +91,106 @@ const Higher = () => {
     // add the score data to the scores state variable
     setScores([...scores, scoreData]);
 
+    // use AsyncStorage to save the scores
+    try {
+      await AsyncStorage.setItem("scores", JSON.stringify(scores));
+    } catch (error) {
+      console.error(error);
+    }
+
     // reset the username and score
     setUsername("");
     setScore(0);
   };
 
+  // inside the component
+  useEffect(() => {
+    const retrieveScores = async () => {
+      try {
+        const scoresString = await AsyncStorage.getItem("scores");
+        if (scoresString) {
+          setScores(JSON.parse(scoresString));
+        }
+      } catch (error) {
+        console.error(error);
+      }
+    };
+    retrieveScores();
+  }, []);
+  const multiFuncLower = () => {
+    handleLower();
+    Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
+  };
+
+  const multiFuncHigher = () => {
+    handleHigher();
+    Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
+  };
+
+  const multiFuncScore = () => {
+    saveScore();
+    Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
+  };
+  const resetGame = () => {
+    setLifes(3);
+    setScore(0);
+    setCurrentIndex(0);
+  };
+
   return (
     <ScrollView>
-      <View style={styles.container}>
-        <Text>Score: {score}</Text>
-        {currentMeme ? (
-          <Image
-            source={{ uri: currentMeme.url }}
-            style={styles.memeImage}
-            resizeMode="contain"
-          />
-        ) : (
-          <Text>Loading memes...</Text>
-        )}
-        {secondMeme ? (
-          <Image
-            source={{ uri: secondMeme.url }}
-            style={styles.memeImage}
-            resizeMode="contain"
-          />
-        ) : null}
-        <View style={styles.buttonContainer}>
-          <Button title="Lower" onPress={handleLower} />
-          <Button title="Higher" onPress={handleHigher} />
-        </View>
+      {lifes === 0 ? (
+        <View style={styles.container}>
+          <Text>Game Over!</Text>
+          <Button title="Play Again" onPress={resetGame} />
 
-        {/* add a text input and button for the user to input their username and save their score */}
-        <TextInput
-          value={username}
-          onChangeText={setUsername}
-          placeholder="Enter your username"
-        />
-        <Button title="Save Score" onPress={saveScore} />
-
-        {/* add a leaderboard to display the saved scores */}
-        <View>
-          <Text>Leaderboard:</Text>
-          {scores.map((scoreData) => (
-            <Text key={scoreData.username}>
-              {scoreData.username}: {scoreData.score}
-            </Text>
-          ))}
+          <TextInput
+            value={username}
+            onChangeText={setUsername}
+            placeholder="Enter your username"
+          />
+          <Button title="Save Score" onPress={multiFuncScore} />
+          <View style={styles.container}>
+            <Text>Leaderboard:</Text>
+            {scores.map((scoreData) => (
+              <Text key={scoreData.username}>
+                {scoreData.username}: {scoreData.score}
+              </Text>
+            ))}
+          </View>
         </View>
-      </View>
+      ) : (
+        <View style={styles.container}>
+          <Text>Score: {score}</Text>
+          <Text>Lives: {lifes}</Text>
+
+          {currentMeme ? (
+            <Image
+              source={{ uri: currentMeme.url }}
+              style={styles.memeImage}
+              resizeMode="contain"
+            />
+          ) : (
+            <Text>Loading memes...</Text>
+          )}
+
+          {secondMeme ? (
+            <Image
+              source={{ uri: secondMeme.url }}
+              style={styles.memeImage}
+              resizeMode="contain"
+            />
+          ) : null}
+          <View style={styles.buttonContainer}>
+            <Button title="Lower" onPress={multiFuncLower} />
+            <Button title="Higher" onPress={multiFuncHigher} />
+          </View>
+
+          {/* add a text input and button for the user to input their username and save their score */}
+
+          {/* add a leaderboard to display the saved scores */}
+        </View>
+      )}
     </ScrollView>
   );
 };

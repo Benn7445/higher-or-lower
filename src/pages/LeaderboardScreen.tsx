@@ -8,6 +8,7 @@ import {
   KeyboardAvoidingView,
 } from "react-native";
 import { GetAsyncStorage, SetAsyncStorage } from "../utils/AsyncStorageHelper";
+import Leaderboard from "./gamecode";
 
 export const LeaderboardScreen = () => {
   const [name, setName] = useState<string | undefined>();
