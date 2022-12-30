@@ -11,8 +11,8 @@ import {
 
 import { GetMemes } from "../utils/MemeAPI";
 import * as Brightness from "expo-brightness";
-
 import * as Haptics from "expo-haptics";
+
 import AsyncStorage from "@react-native-async-storage/async-storage";
 // Define an interface for the data that is returned by the imgflip API
 interface Meme {

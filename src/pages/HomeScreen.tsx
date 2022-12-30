@@ -1,60 +1,29 @@
-import { useState, useEffect } from "react";
-import { View, Image, StyleSheet } from "react-native";
-import { getTwoRandomMemes } from "../utils/MemeAPI";
-import { Text } from "react-native";
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    alignItems: "center",
-    justifyContent: "center",
-  },
-  image: {
-    width: "100%",
-    height: "50%",
-  },
-  circle: {
-    width: 100,
-    height: 100,
-    borderRadius: 50,
-    backgroundColor: "white",
-    alignItems: "center",
-    justifyContent: "center",
-  },
-  circleText: {
-    fontSize: 20,
-    color: "white",
-  },
-});
+import { View, Text } from "react-native";
 
 export const HomeScreen = () => {
-  const [memes, setMemes] = useState<any[]>([]);
-
-  useEffect(() => {
-    const asyncCall = async () => {
-      const memes = await getTwoRandomMemes();
-      setMemes(memes);
-    };
-    asyncCall();
-  }, []);
-
   return (
-    <View style={styles.container}>
-      {memes.map((meme, count) => {
-        return (
-          <View style={styles.image}>
-            <View style={styles.circle}>
-              <Text>VS</Text>
-            </View>
-            <Image
-              key={"meme-" + count}
-              source={{ uri: meme.url }}
-              style={styles.image}
-              resizeMode="cover"
-            />
-          </View>
-        );
-      })}
+    <View
+      style={{
+        backgroundColor: "white",
+        flex: 1,
+        alignItems: "center",
+      }}
+    >
+      <Text style={{ fontSize: 24, fontWeight: "bold", margin: "10%" }}>
+        Welkom bij de Higher or Lower game
+      </Text>
+      <Text
+        style={{
+          fontSize: 20,
+          padding: "3%",
+        }}
+      >
+        In dit spel krijgt u 2 memes te zien 1 boven de ander en daaronder 2
+        knoppen. 1 genaamd "Higher" andere genaamd "Lower". U moet raden of de
+        meme die van onder staat Hoger of Lager staat in de index
+        ("populariteit") dan diegene erboven. Als u juist raad krijgt u een punt
+        Zo niet verliest u een leven.
+      </Text>
     </View>
   );
 };
