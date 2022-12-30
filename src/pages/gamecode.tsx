@@ -138,7 +138,7 @@ const Higher = () => {
           onChangeText={setUsername}
           placeholder="Enter your username"
         />
-        <Button title="Save Score" onPress={multiFuncScore} />
+        <Button title="Save Score" onPress={multiFuncScore } />
 
         {/* add a leaderboard to display the saved scores */}
         <View>
