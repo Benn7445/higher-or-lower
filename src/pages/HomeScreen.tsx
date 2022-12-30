@@ -1,30 +1,21 @@
-import { useState, useEffect } from "react";
-import { View, Image } from "react-native";
-import { getTwoRandomMemes } from "../utils/MemeAPI";
+import { View, Text } from "react-native";
 
 export const HomeScreen = () => {
-  const [memes, setMemes] = useState<any[]>([]);
-
-  useEffect(() => {
-    const asyncCall = async () => {
-      const memes = await getTwoRandomMemes();
-      setMemes(memes);
-    };
-    asyncCall();
-  }, []);
-
   return (
-    <View>
-      {memes.map((meme, count) => {
-        return (
-          <Image
-            key={"meme-" + count}
-            source={{ uri: meme.url }}
-            style={{ width: "100%", height: "50%" }}
-            resizeMode="cover"
-          />
-        );
-      })}
+    <View style ={{
+      backgroundColor: "white",
+      flex: 1,
+      alignItems: "center"
+    }}>
+      <Text style={{fontSize: 24, fontWeight: "bold", margin: "10%"}}>Welkom bij de Higher or Lower game</Text>
+      <Text style={{
+        fontSize: 20,
+        padding: "3%"
+      }}>
+        In dit spel krijgt u 2 memes te zien 1 boven de ander en daaronder 2 knoppen. 1 genaamd "Higher" andere genaamd "Lower".
+        U moet raden of de meme die van onder staat Hoger of Lager staat in de index ("populariteit") dan diegene erboven. Als u juist raad krijgt u een punt
+        Zo niet verliest u een leven.
+      </Text>
     </View>
   );
 };

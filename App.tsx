@@ -19,7 +19,7 @@ export const App = () => {
             tabBarIcon: (active) => {
               return (
                 <AntDesign
-                  name="Trophy"
+                  name="home"
                   color={active.focused ? "#008080" : "#808080"}
                   size={20}
                 />
@@ -46,7 +46,23 @@ export const App = () => {
             tabBarInactiveTintColor: "#808080",
           }}
         />
-        <Tab.Screen name="gameV2" component={Higher} />
+        <Tab.Screen 
+        name="gameV2" 
+        component={Higher}
+        options={{
+          tabBarIcon: (active) => {
+            return (
+              <AntDesign
+                name="play"
+                color={active.focused ? "#008080" : "#808080"}
+                size={20}
+              />
+            );
+          },
+          tabBarActiveTintColor: "#008080",
+          tabBarInactiveTintColor: "#808080",
+        }}
+         />
       </Tab.Navigator>
     </NavigationContainer>
   );
