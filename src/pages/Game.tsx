@@ -7,6 +7,7 @@ import {
   Button,
   TextInput,
   ScrollView,
+  TouchableOpacity
 } from "react-native";
 
 import { GetMemes } from "../utils/MemeAPI";
@@ -24,14 +25,18 @@ interface ScoreData {
   username: string;
   score: number;
 }
-const Higher = () => {
+
+type GameProps = {
+  scores: any;
+  setScores: any;
+}
+
+const Game = (props: GameProps) => {
   const [memes, setMemes] = useState<Meme[]>([]);
   const [currentIndex, setCurrentIndex] = useState(0);
   const [score, setScore] = useState(0);
   const [username, setUsername] = useState("");
   const [lifes, setLifes] = useState(3);
-
-  const [scores, setScores] = useState<ScoreData[]>([]);
 
   useEffect(() => {
     const asyncCall = async () => {
@@ -84,9 +89,9 @@ const Higher = () => {
       username: username,
       score: score,
     };
-    setScores([...scores, scoreData]);
+    props.setScores([...props.scores, scoreData]);
     try {
-      await AsyncStorage.setItem("scores", JSON.stringify(scores));
+      await AsyncStorage.setItem("scores", JSON.stringify(props.scores));
     } catch (error) {
       console.error(error);
     }
@@ -99,7 +104,7 @@ const Higher = () => {
       try {
         const scoresString = await AsyncStorage.getItem("scores");
         if (scoresString) {
-          setScores(JSON.parse(scoresString));
+          props.setScores(JSON.parse(scoresString));
         }
       } catch (error) {
         console.error(error);
@@ -107,6 +112,7 @@ const Higher = () => {
     };
     retrieveScores();
   }, []);
+
   const multiFuncLower = () => {
     handleLower();
     Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
@@ -118,9 +124,13 @@ const Higher = () => {
   };
 
   const multiFuncScore = () => {
-    saveScore();
-    Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
+    if (username !== "") {
+      saveScore();
+      Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
+      resetGame()
+    }
   };
+  
   const resetGame = () => {
     setLifes(3);
     setScore(0);
@@ -131,28 +141,30 @@ const Higher = () => {
     <ScrollView>
       {lifes === 0 ? (
         <View style={styles.container}>
-          <Text>Game Over!</Text>
-          <Button title="Play Again" onPress={resetGame} />
-
           <TextInput
             value={username}
             onChangeText={setUsername}
             placeholder="Enter your username"
+            placeholderTextColor="#fff"
+            style={{ color: "white", marginTop: 25 }}
           />
-          <Button title="Save Score" onPress={multiFuncScore} />
-          <View style={styles.container}>
-            <Text>Leaderboard:</Text>
-            {scores.map((scoreData) => (
-              <Text key={scoreData.username}>
-                {scoreData.username}: {scoreData.score}
-              </Text>
-            ))}
-          </View>
+          <TouchableOpacity
+            onPress={() => multiFuncScore()}
+            style={{ backgroundColor: "gray", width: "95%", alignItems: "center", paddingVertical: 20, borderRadius: 10, marginTop: 20 }}
+          >
+            <Text style={{ color: "white" }}>Save Score</Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            onPress={() => resetGame()}
+            style={{ backgroundColor: "green", width: "95%", alignItems: "center", paddingVertical: 20, borderRadius: 10, marginTop: 20 }}
+          >
+            <Text style={{ color: "white" }}>Speel Opnieuw</Text>
+          </TouchableOpacity>
         </View>
       ) : (
         <View style={styles.container}>
-          <Text>Score: {score}</Text>
-          <Text>Lives: {lifes}</Text>
+          <Text style={{ color: "white", marginTop: 15 }}>Score: {score}</Text>
+          <Text style={{ color: "white", marginBottom: 25 }}>Lives: {lifes}</Text>
 
           {currentMeme ? (
             <Image
@@ -186,16 +198,15 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: "center",
     justifyContent: "center",
-    backgroundColor: "white",
   },
   memeImage: {
     width: "80%",
-    height: 300,
+    height: 250,
   },
   buttonContainer: {
     flexDirection: "row",
-    marginTop: 20,
+    marginTop: 10,
   },
 });
 
-export default Higher;
+export default Game;
