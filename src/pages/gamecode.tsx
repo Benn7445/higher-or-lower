@@ -10,7 +10,6 @@ import {
 } from "react-native";
 
 import { GetMemes } from "../utils/MemeAPI";
-import * as Brightness from "expo-brightness";
 import * as Haptics from "expo-haptics";
 
 import AsyncStorage from "@react-native-async-storage/async-storage";

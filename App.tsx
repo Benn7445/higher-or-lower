@@ -9,6 +9,7 @@ import Higher from "./src/pages/gamecode";
 const Tab = createBottomTabNavigator();
 
 export const App = () => {
+
   return (
     <NavigationContainer theme={DarkTheme}>
       <Tab.Navigator>

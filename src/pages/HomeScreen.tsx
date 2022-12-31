@@ -1,6 +1,47 @@
 import { View, Text } from "react-native";
+import { StatusBar } from 'expo-status-bar';
+import * as SplashScreen from 'expo-splash-screen';
+import React, { useCallback, useEffect, useState } from 'react';
+
+SplashScreen.preventAutoHideAsync();
 
 export const HomeScreen = () => {
+  const [appIsReady, setAppIsReady] = useState(false);
+  const [color,setColor] = useState("")
+  const arr : string[] = ["blue", "red", "pink", "white", "black", "yellow", "green"]
+
+  useEffect(() => {
+    async function prepare() {
+      try {
+      } catch (e) {
+        console.warn(e);
+      } finally {
+        setAppIsReady(true);
+      }
+    }
+
+    prepare();
+  }, []);
+
+  useEffect (() => {
+    const randomColor = (arr : string[]) => {
+      const random = Math.floor(Math.random() *  7 )
+      setColor(arr[random])
+    }
+    randomColor(arr);
+  }, [])
+
+  const onLayoutRootView = useCallback(async () => {
+    if (appIsReady) {
+      await SplashScreen.hideAsync();
+    }
+  }, [appIsReady]);
+
+  if (!appIsReady) {
+    return null;
+  }
+
+
   return (
     <View
       style={{
@@ -8,10 +49,14 @@ export const HomeScreen = () => {
         flex: 1,
         alignItems: "center",
       }}
+      onLayout={onLayoutRootView}
     >
       <Text style={{ fontSize: 24, fontWeight: "bold", margin: "10%" }}>
         Welkom bij de Higher or Lower game
       </Text>
+      <StatusBar 
+        backgroundColor={color}
+        />
       <Text
         style={{
           fontSize: 20,
