@@ -14,7 +14,6 @@ import * as Brightness from "expo-brightness";
 import * as Haptics from "expo-haptics";
 
 import AsyncStorage from "@react-native-async-storage/async-storage";
-// Define an interface for the data that is returned by the imgflip API
 interface Meme {
   id: string;
   name: string;
@@ -33,7 +32,6 @@ const Higher = () => {
   const [username, setUsername] = useState("");
   const [lifes, setLifes] = useState(3);
 
-  // add a state variable to store the scores and usernames
   const [scores, setScores] = useState<ScoreData[]>([]);
 
   useEffect(() => {
@@ -80,30 +78,23 @@ const Higher = () => {
 
   const currentMeme = memes[currentIndex];
 
-  const secondMeme = memes[secondMemeIndex]; // add a reference to the second meme here
+  const secondMeme = memes[secondMemeIndex];
 
   const saveScore = async () => {
     const scoreData: ScoreData = {
       username: username,
       score: score,
     };
-
-    // add the score data to the scores state variable
     setScores([...scores, scoreData]);
-
-    // use AsyncStorage to save the scores
     try {
       await AsyncStorage.setItem("scores", JSON.stringify(scores));
     } catch (error) {
       console.error(error);
     }
-
-    // reset the username and score
     setUsername("");
     setScore(0);
   };
 
-  // inside the component
   useEffect(() => {
     const retrieveScores = async () => {
       try {
@@ -185,10 +176,6 @@ const Higher = () => {
             <Button title="Lower" onPress={multiFuncLower} />
             <Button title="Higher" onPress={multiFuncHigher} />
           </View>
-
-          {/* add a text input and button for the user to input their username and save their score */}
-
-          {/* add a leaderboard to display the saved scores */}
         </View>
       )}
     </ScrollView>
