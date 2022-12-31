@@ -51,7 +51,7 @@ export const HomeScreen = () => {
       }}
       onLayout={onLayoutRootView}
     >
-      <Text style={{ fontSize: 24, fontWeight: "bold", margin: "10%" }}>
+      <Text style={{ fontSize: 24, fontWeight: "bold", margin: "10%"}}>
         Welkom bij de Higher or Lower game
       </Text>
       <StatusBar 
@@ -59,15 +59,16 @@ export const HomeScreen = () => {
         />
       <Text
         style={{
-          fontSize: 20,
+          fontSize: 16,
           padding: "3%",
         }}
       >
         In dit spel krijgt u 2 memes te zien 1 boven de ander en daaronder 2
-        knoppen. 1 genaamd "Higher" andere genaamd "Lower". U moet raden of de
+        knoppen. 1 genaamd "Higher" andere genaamd "Lower". {'\n'}{'\n'}U moet raden of de
         meme die van onder staat Hoger of Lager staat in de index
-        ("populariteit") dan diegene erboven. Als u juist raad krijgt u een punt
-        Zo niet verliest u een leven.
+        ("populariteit") dan diegene erboven.{'\n'}{'\n'}Als u juist raad krijgt u een punt
+        zo niet verliest u een leven. {'\n'}{'\n'}Het punt is om de hoogste score te behalen. U hebt 3 levens 
+        eens dat uw levens op zijn eindigt het spel.
       </Text>
     </View>
   );
