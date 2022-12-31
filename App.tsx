@@ -1,7 +1,6 @@
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { NavigationContainer, DarkTheme } from "@react-navigation/native";
 import AntDesign from "react-native-vector-icons/AntDesign";
-
 import HomeScreen from "./src/pages/HomeScreen";
 import Game from "./src/pages/Game";
 import Leaderboard from "./src/pages/Leaderboard";
